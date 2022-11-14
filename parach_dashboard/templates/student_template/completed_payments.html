@@ -1,0 +1,113 @@
+{% extends 'admin_templates/admin-base.html' %}
+{% load static %}
+{% block title %}completed payments{% endblock %}
+{% block content %}
+<style>
+  #table-links a{
+    padding-left: 20px;
+    
+  }
+  input:focus{
+    background-color: red;
+  }
+</style>
+<main class="">
+    <section class="allsudents">
+        <div class="row">
+           <div class="col s12 m12">
+             >> manager
+           </div>
+           {% for message in messages %}
+        {% if message %}
+            {{ message }}
+        {% endif %}
+    {% endfor %}
+        </div>
+         <div class="row">
+            <div class="col s8 m8">
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for student.." title="Type in a name" autocomplete="off">
+            </div>
+            <div class="col s4 m4">
+                  
+            </div>
+          </div>
+      
+      <div class="table col s12 m12">
+        <div class="row">
+          <div class="col s12 m12">
+            <table class="" id="myTable">
+              {% if student %}
+              <thead>
+                <tr>
+                    <th>id</th>
+                    <th>photo</th>
+                    <th>Name</th>
+                    
+                    <th>course</th>
+                    <th>Amount paid</th>
+                    <th>Payment status</th>
+                    <th class="left-align">View | Update | Delete</th>
+                </tr>
+              </thead>
+              {% endif %}
+          {% for student in students %}
+              <tbody>
+                <tr>
+                  <td>#{{student.pk}}</td>
+                  <td>
+                    {% if student.profile_pic %}
+                    <img src="{{student.profile_pic.url}}" alt="">
+                    {% else %}
+                      
+                    <img src="{% static 'img/2.jpg' %}" alt="" class="" />
+                    {% endif %}
+                  </td>
+                  <td >{{student.firstname}}</td>
+                  
+                  <td>{{student.course.name}}</td>
+                  <td>{{student.amountpaid}}</td>
+                  <td>{{student.payment_status}}</td>
+                  <td id="table-links">
+                      
+                           
+
+                              <a href="{% url 'parach_dashboard:student_details' student.slug %}"><i class="fas fa-eye" style="color: #009688;"></i></a>
+                              <a href="{% url 'parach_dashboard:student_updates' student.slug %}"><i class="fas fa-edit" style="color: #009688;"></i></a>
+                              <a href="{% url 'parach_dashboard:student_delete' student.slug %}"><i class="fas fa-trash" style="color: coral;"></i></a>
+                         
+                  </td>
+                </tr>
+              </tbody>
+              {% empty %}
+              <h3 class="container">No data available yet</h3>
+          {% endfor %}
+              
+            </table>
+          </div>
+        </div>
+      </div>
+                
+    </section>
+</main>
+<script>
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[2];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+  }
+  </script>
+{% endblock %}

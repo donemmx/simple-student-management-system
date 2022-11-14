@@ -1,0 +1,66 @@
+{% extends 'admin_templates/admin-base.html' %}
+{% load materializecss%}
+{% load static %}
+{% block title %}Add course{% endblock %}
+{% block content %}
+<style>
+  
+</style>
+<main class="">
+    <h3>Add course</h3>
+    <div class="row">
+        <div class="col s12 m5">
+            <form action="" method="POST">
+                {% csrf_token%}
+
+                {{form|materializecss}}
+                <button type="submit" class="waves-effect waves-light btn">Add</button>
+            </form>
+        </div>
+        <div class="col s12 m7">
+        {% for message in messages %}
+        {% if message %}
+         <div class="card horizontal">
+            <div class="card-stacked">
+              <div class="card-content teal text-lighten">
+                
+                        {{ message }}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {%endfor%}
+          <table>
+            {% if course %}
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Price</th>
+                    <th>Date created</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            {%endif%}
+
+            
+            {% for courses in course %}
+                <tbody>
+                    <tr>
+                        <td>{{courses.name}}</td>
+                        <td>{{courses.price}}</td>
+                        <td>{{courses.added_on}}</td>
+                        <td><a href="{% url 'parach_dashboard:update_course' courses.slug%}"><i class="material-icons sidenav-icons">edit</i></a></td>
+                        <td><a href="{% url 'parach_dashboard:delete_course' courses.slug%}"><i class="material-icons sidenav-icons" style="color: red !important;">delete_forever</i></a></td>
+                    </tr>
+                </tbody>
+                {% empty %}
+                <h3>Sorry, No courses created yet.</h3>
+            {%endfor%}
+        </table>
+        </div>
+       
+    </div>
+</main>
+
+{% endblock content %}

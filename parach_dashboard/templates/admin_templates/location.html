@@ -1,0 +1,282 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!--Import Google Icon Font-->
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <!--Import materialize.css-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="{% static 'css/materialize.min.css' %}"
+      media="screen,projection"
+    />
+    <link rel="stylesheet" href="{% static 'css/customcss.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        #table-links a{
+          padding-left: 20px;
+          
+        }
+        svg{
+        width: 20px;
+        height: 20px;
+        fill: teal;
+      }
+        .phone{
+  display: flex;
+  margin-top: 13px;
+  gap: 5px;
+  color: #000;
+ }
+ .phone a{
+  color: #000;
+ }
+      </style>
+  </head>
+  <br />
+  <hr />
+  <body>
+    <!-- Dropdown Structure -->
+    <header class="teal">
+      <ul id="dropdown1" class="dropdown-content">
+        <li><a class="dropdown-trigger2"></a></li>
+
+        <li class="divider"></li>
+        <li>
+          <a href="{% url 'parach_dashboard:logout'%}"
+            ><i class="material-icons sidenav-icons">lock</i>logout</a
+          >
+        </li>
+      </ul>
+      <nav>
+        <div class="nav-wrapper">
+          <a
+            href="#"
+            data-target="sidenav-1"
+            class="left sidenav-trigger hide-on-medium-and-up"
+            ><i class="material-icons">menu</i></a
+          >
+
+          <!--- 
+            <a href="#!" class="brand-logo"><span>PARACH ICT ACCADEMY</span></a>
+          -->
+
+          <ul class="right hide-on-med-and-down">
+            <!-- <li><a href="">{{user.username}}</a></li> -->
+            <li>---</li>
+            <!-- Dropdown Trigger -->
+            <li>
+              <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                <i class="material-icons right">arrow_drop_down</i></a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!-- LEFT SIDEBAR  -->
+    <ul id="sidenav-1" class="sidenav sidenav-fixed sidenav-icons2">
+      <div class="profile_picture">
+        <img src="{% static 'img/parach.png' %}" alt="" class="" />
+      </div>
+
+      <li class="left-align">
+        <a href="{% url 'parach_dashboard:dashboard' %}"
+          ><i class="fas fa-th-large"></i>Admin Dashboard</a
+        >
+      </li>
+      <li class="left-align">
+        <a href="{% url 'parach_dashboard:instructor_home' %}"
+          ><i class="fas fa-user-graduate"></i>Instructors</a
+        >
+      </li>
+      <li class="left-align">
+        <a href="{% url 'parach_dashboard:student_home' %}"
+          ><i class="fas fa-user-friends"></i> Students</a
+        >
+      </li>
+      <li class="left-align">
+        <a href="{% url 'parach_dashboard:enquiry_home' %}"
+          ><i class="fas fa-question"></i> Enquiries</a
+        >
+      </li>
+      <li class="left-align">
+        <a href="{% url 'parach_dashboard:create_course' %}"
+          ><i class="fas fa-book"></i> Courses</a
+        >
+      </li>
+      <!-- <li class="left-align">
+        <a href=""
+          ><i class="far fa-bell"></i> Announcements</a
+        >
+      </li> -->
+      
+      <li class="left-align">
+        <a href=""
+          ><i class="far fa-credit-card"></i> Payments</a
+        >
+      </li>
+   
+      <!-- <ul class="collapsible">
+        <li>
+          <div class="collapsible-header">
+            <i class="far fa-location"></i>locations
+          </div>
+         
+         
+        </li>
+      </ul> -->
+      <li class="left-align">
+        <a href=""
+          ><i class="fa fa-location"></i> download csv file</a
+        >
+      </li>
+
+      {%if user.is_superuser or user.is_teacher%} {%else%}
+      <li class="left-align">
+        <!-- <a href=""
+          ><i class="fas fa-users-cog"></i> Settings</a
+        > -->
+      </li>
+      {%endif%}
+      <li class="left-align">
+        <a href="{% url 'parach_dashboard:logout'%}"
+          ><i class="fas fa-sign-out-alt"></i> Logout</a
+        >
+      </li>
+    </ul>
+    <main class="">
+  
+        <section class="allsudents">
+            <div class="row">
+               <div class="pt-5 container">
+                <h1 style="color:#009688;">{{locations.branch_name}} Branch</h1>
+               </div>
+
+               <div class="teal" style="color: #fff">
+                <p>
+                  {% for message in messages %}
+            {% if message %}
+                {{ message }}
+            {% endif %}
+            
+        {% endfor %}
+                </p>
+               </div>
+            </div>
+             <div class="row">
+                <div class="col s8 m8">
+                  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for student.." title="Type in a name" autocomplete="off">
+                </div>
+                <div class="col s4 m4">
+                      <div class="button-add-student center-align">
+                        <a class="btn-floating waves-effect waves-light teal" href="{% url 'parach_dashboard:create_student' %}"><i class="fas fa-plus"></i></a>
+                      </div>
+                </div>
+              </div>
+             
+          <div class="table col s12 m12">
+            <div class="row">
+              <div class="">
+                <table class="" id="myTable">
+                  <thead>
+                    <tr>
+                       
+                        <th>photo</th>
+                        <th>Name</th>
+                        <th>gender</th>
+                        <th>course</th>
+                        <th>phone</th>
+                        <th>Location</th>
+                        <th class="left-align">View | Update | Delete</th>
+                    </tr>
+                  </thead>
+              
+              {% for student in students %}
+              <tbody class="pl-5">
+                    <tr>
+                      <!-- <td></td> -->
+                      <td>
+                        {% if student.profile_pic %}
+                        <img src="{{student.profile_pic.url}}" alt="">
+                        {% else %}
+                          
+                        <img src="{% static 'img/2.jpg' %}" alt="" class="" />
+                        {% endif %}
+                        </td>
+                      <td >{{student.firstname}}</td>
+                      <td>{{student.gender}}</td>
+                      <td>{{student.course.name}}</td>
+                      <td class="phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm90.7 96.7c9.7-2.6 19.9 2.3 23.7 11.6l20 48c3.4 8.2 1 17.6-5.8 23.2L168 231.7c16.6 35.2 45.1 63.7 80.3 80.3l20.2-24.7c5.6-6.8 15-9.2 23.2-5.8l48 20c9.3 3.9 14.2 14 11.6 23.7l-12 44C336.9 378 329 384 320 384C196.3 384 96 283.7 96 160c0-9 6-16.9 14.7-19.3l44-12z"/></svg><a href="tel:{{student.mobile_phone}}">{{student.mobile_phone}}</a></td>
+                      <td>{{student.branch.branch_name}}</td>
+                      <td id="table-links">
+                          
+                                  <a href="{% url 'parach_dashboard:student_details' student.slug %}"><i class="fas fa-eye" style="color: #009688;"></i></a>
+                                  <a href="{% url 'parach_dashboard:student_updates' student.slug %}"><i class="fas fa-edit" style="color: #009688;"></i></a>
+                                  <a href="{% url 'parach_dashboard:student_delete' student.slug %}"><i class="fas fa-trash" style="color: coral;"></i></a>
+                             
+                      </td>
+                    </tr>
+                  </tbody>
+                  {% empty %}
+                  <h3 class="container">Sorry, No student in <span style="color:#009688; border-bottom: 3px solid teal;">{{locations.branch_name}}</span> branch yet</h3>
+                  {% endfor %}
+                
+             
+                  
+                </table>
+              </div>
+            </div>
+          </div>
+                    
+        </section>
+    </main>
+    <script>
+      function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+    
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[1];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }       
+        }
+      }
+      </script>
+
+    <script src="{% static 'js/customjs/jq.js' %}"></script>
+    <script src="{% static 'js/customjs/js.js' %}"></script>
+    <script src="{% static 'js/customjs/materialize.js' %}"></script>
+    <script src="{% static 'js/customjs/materialize.min.js' %}"></script>
+  </body>
+</html>
